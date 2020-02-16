@@ -34,18 +34,22 @@ public class ZuulFilterImpl extends ZuulFilter
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         HttpSession sess = request.getSession(false);
+        String token =null;
         if(sess== null) {
         	System.out.println("session is null in ZULL FILTER");
         } else {
         UserInfo user = 	(UserInfo) sess.getAttribute("authUser");
         if(user ==null) {
         	System.out.println("user is null in zuul fiter");
+        	
         }else {
         	System.out.println("user in zull filter is "+user.toString());
+        	 token =  (String) sess.getAttribute("jwtToken");
+        	 System.out.println("token in zuul filter is --->> "+token);
         }
         }
         
-        ctx.addZuulRequestHeader("userId", "123456789");
+        ctx.addZuulRequestHeader("auth",token );
         ctx.setRequest(request);
         return ctx;
     }
